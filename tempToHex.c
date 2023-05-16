@@ -3,19 +3,48 @@
 
 char getNumber(char c);
 int getTempValue(char *vec);
+void getUni(char *vec, int *uni);
+void setBit(int *p, int index, int bitValue);
+void setTemp(int *p, int value);
 
 int main(){
 
       int tempValue;
       char input[5];
-      
+      int sig = 0;
+      int *uni = 0;
+      int *mask = 0xA000;
+
       printf("Digite o valor da temperatura: \n");
       scanf("%s", &input);
+
+      sig = input[0] == '-' ? 1 : 0;
+      getUni(input, &uni);
       tempValue = getTempValue(input);
+
+      setBit(&mask, 9, sig);
+      setBit(&mask, 8, uni);
+      setTemp(&mask, tempValue);
       
-      printf("%d", tempValue);
+      printf("%X\n", mask);
 
       return 0;
+}
+
+void setTemp(int *p, int value){
+      *p ^= value;
+}
+
+void setBit(int *p, int index, int bitValue){
+      *p ^= (bitValue << index);
+}
+
+void getUni(char *vec, int *uni){
+      for(int i = 0; i<4; i++){
+            if(vec[i] == 'F'){
+                  *uni = 1;
+            }
+      }
 }
 
 int getTempValue(char *vec){
