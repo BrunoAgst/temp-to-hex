@@ -6,6 +6,8 @@ int getTempValue(char *vec);
 void getUni(char *vec, int *uni);
 void setBit(int *p, int index, int bitValue);
 void setTemp(int *p, int value);
+void bin(unsigned n);
+void displayBin(int *mask);
 
 int main(){
 
@@ -15,7 +17,7 @@ int main(){
       int *uni = 0;
       int *mask = 0xA000;
 
-      printf("Digite o valor da temperatura: \n");
+      printf("Enter temperature: \n");
       scanf("%s", &input);
 
       sig = input[0] == '-' ? 1 : 0;
@@ -25,10 +27,23 @@ int main(){
       setBit(&mask, 9, sig);
       setBit(&mask, 8, uni);
       setTemp(&mask, tempValue);
+      displayBin(mask);
       
-      printf("%X\n", mask);
-
       return 0;
+}
+
+void displayBin(int *mask){
+      printf("\n--------------------------------------------------\n");
+      printf("protocol    error s  u      temperature\n");
+      bin(mask);
+      printf("\n--------------------------------------------------\n");
+      printf("\n%Xh\n", mask);
+}
+
+void bin(unsigned n){
+    unsigned i;
+    for (i = 1 << 15; i > 0; i = i / 2)
+        (n & i) ? printf("1  ") : printf("0  ");
 }
 
 void setTemp(int *p, int value){
